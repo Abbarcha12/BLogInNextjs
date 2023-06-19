@@ -3,11 +3,11 @@ import styles from "./page.module.css";
 import Link from "next/link";
 import Image from "next/image";
 
-// FETCH DATA FROM SERVER IN NEXT JS WITHOUT USING USESTATE OR USEEFFECT
-async function getData(){
-  const res = await fetch("http://localhost:3000/api/posts",{
-    cache:"no-store"
+async function getData() {
+  const res = await fetch("http://localhost:3000/api/posts", {
+    cache: "no-store",
   });
+
   if (!res.ok) {
     throw new Error("Failed to fetch data");
   }
@@ -16,10 +16,9 @@ async function getData(){
 }
 
 const Blog = async () => {
-  const data =await getData()
-
+  const data = await getData();
   return (
-      <div className={styles.mainContainer}>
+    <div className={styles.mainContainer}>
       {data.map((item) => (
         <Link href={`/blog/${item._id}`} className={styles.container} key={item.id}>
           <div className={styles.imageContainer}>
@@ -40,6 +39,5 @@ const Blog = async () => {
     </div>
   );
 };
- 
 
-export default Blog
+export default Blog;

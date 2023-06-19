@@ -1,50 +1,31 @@
-import {
-    NextResponse
-} from "next/server";
+import { NextResponse } from "next/server";
 import DBconnect from "@/utils/db";
 import Post from "@/models/Post";
 
-// GETTING SINGLE_POST_id
+export const GET = async (request, { params }) => {
+  const { id } = params;
 
+  try {
+    await DBconnect();
 
-export const GET = async (req, {
-    params
-}) => {
-    const {
-        id
-    } = params
+    const post = await Post.findById(id);
 
-    try {
-        await DBconnect()
-        const post = await Post.findById(id)
-        if (!post) return new Response("Not Found", {
-            status: 404
-        })
-        return new NextResponse(JSON.stringify(post), {
-            status: 200
-        })
-    } catch (error) {
-        return new NextResponse("DatabaseError",{status:500})
-    }
-}
+    return new NextResponse(JSON.stringify(post), { status: 200 });
+  } catch (err) {
+    return new NextResponse("Database Error", { status: 500 });
+  }
+};
 
-// DELETING SINGLE_POST_id
+export const DELETE = async (request, { params }) => {
+  const { id } = params;
 
-export const DELETE = async (req, {
-    params
-}) => {
-    const {
-        id
-    } = params
+  try {
+    await DBconnect();
 
-    try {
-        await DBconnect()
-        await Post.findByIdAndDelete(id);
-                return new NextResponse("Post Has been Deleted ", {
-            status: 200
-        })
-    } catch (error) {
-        return new NextResponse("DatabaseError",{status:500})
-    }
-}
+    await Post.findByIdAndDelete(id);
 
+    return new NextResponse("Post has been deleted", { status: 200 });
+  } catch (err) {
+    return new NextResponse("Database Error", { status: 500 });
+  }
+};
